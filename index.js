@@ -3,7 +3,7 @@ var  exec = require('child_process').exec;
 var iwinfo = {};
 
 iwinfo.scan = function (intf, callback) {
-    var child = exec('time iwinfo ' + 'ra0' + ' scan', function (error, stdout, stderr) {
+    var child = exec('time iwinfo ' + intf + ' scan', function (error, stdout, stderr) {
         if (error)
             return callback(err);
 

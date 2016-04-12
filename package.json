@@ -1,0 +1,26 @@
+{
+  "name": "mt7688-iwinfo",
+  "version": "0.2.0",
+  "description": "MT7688 Wireless Information",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simenkid/mt7688-iwinfo.git"
+  },
+  "keywords": [
+    "mt7688",
+    "linkit",
+    "wireless",
+    "rssi",
+    "lqi"
+  ],
+  "author": "Simen Li",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/simenkid/mt7688-iwinfo/issues"
+  },
+  "homepage": "https://github.com/simenkid/mt7688-iwinfo#readme"
+}

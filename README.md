@@ -1,2 +1,2 @@
-# mt7688-lqi
-mt7688 link quality
+# mt7688-iwinfo
+mt7688 wireless info

@@ -1,17 +1,34 @@
-var  exec = require('child_process').exec;
+var exec = require('child_process').exec;
+
+var defaultInterface = 'ra0',
+    freqs = [ '2.412', '2.417', '2.422', '2.427', '2.432', '2.437', '2.442', '2.447', '2.452', '2.457', '2.462' ];
 
 var wiscan = {};
 
 wiscan.scan = function (intf, callback) {
-    var child = exec('iwinfo ' + intf + ' scan', function (error, stdout, stderr) {
-        if (error)
-            return callback(err);
+    var child;
+
+    if (typeof intf === 'function') {
+        callback = intf;
+        intf = defaultInterface;
+    }
+
+    intf = intf || defaultInterface;
+    callback = callback || function () {};
+
+    if (typeof intf !== 'string')
+        return callback(new Error('intf should be a string.'));
+
+    child = exec('iwinfo ' + intf + ' scan', function (error, stdout, stderr) {
+        if (error) {
+            stderr = stderr.trim();
+            return callback(new Error(stderr));
+        }
 
         var info = stdout,
             parsed = [];
 
         info = info.replace(/\n/g, ' ');
-        info = info.replace(/:/g, '');
         info = info.replace(/"/g, '');
         info = info.split(' ');
         info.forEach(function (char, i) {
@@ -27,24 +44,53 @@ wiscan.scan = function (intf, callback) {
 };
 
 wiscan.scanByEssid = function (intf, essid, callback) {
-    var hit = false,
-        target;
+    var target = null;
+
+    if (arguments.length === 2) {
+        callback = essid;
+        essid = intf;
+        intf = defaultInterface;
+    }
+
+    intf = intf || defaultInterface;
+
+    if (typeof intf !== 'string')
+        return callback(new Error('intf should be a string.'));
+    else if (typeof essid !== 'string')
+        return callback(new Error('essid should be a string.'));
+
+    callback = callback || function () {};
 
     wiscan.scan(intf, function (err, infos) {
         if (err)
             return callback(err);
 
         infos.forEach(function (info) {
-            if (info.essid === essid) {
-                hit = true;
+            if (info.essid === essid)
                 target = info;
-            }
         });
 
-        if (hit)
-            callback(null, target);
+        callback(null, target);
+    });
+};
+
+wiscan.lqi = function (intf, essid, callback) {
+    if (arguments.length === 2) {
+        callback = essid;
+        essid = intf;
+        intf = defaultInterface;
+    }
+
+    intf = intf || defaultInterface;
+
+    wiscan.scanByEssid(intf, essid, function (err, info) {
+        if (err)
+            return callback(err);
+
+        if (info)
+            callback(null, info.quality);
         else
-            callback(new Error(essid + ' not found.'));
+            callback(null, null);
     });
 };
 
@@ -59,30 +105,31 @@ function parse(items) {
     items.forEach(function (c, i) {
         var val;
         if (c === 'Cell') {
-            // val = items[i+1];
-            // val = isNaN(parseInt(val)) ? val : parseInt(val);
-            // parsed.push({ cell: val });
-        } else if (c === 'Address') {
+            //- [deleted: need not cell field] val = items[i+1];
+            //- [deleted: need not cell field] val = isNaN(parseInt(val)) ? val : parseInt(val);
+            parsed.push({});
+        } else if (c === 'Address:') {
             parsed[idx].address = items[i+1];
-        } else if (c === 'ESSID') {
+        } else if (c === 'ESSID:') {
             parsed[idx].essid = items[i+1];
-        } else if (c === 'Mode') {
+        } else if (c === 'Mode:') {
             parsed[idx].mode = items[i+1];
-        } else if (c === 'Channel') {
+        } else if (c === 'Channel:') {
             val = items[i+1];
             val = isNaN(parseInt(val)) ? val : parseInt(val);
             parsed[idx].channel = val;
-        } else if (c === 'Signal') {
+            parsed[idx].frequency = getFrequency(val);
+        } else if (c === 'Signal:') {
             val = items[i+1];
             val = isNaN(parseInt(val)) ? val : parseInt(val);
             parsed[idx].signal = val;
-        } else if (c === 'Quality') {
+        } else if (c === 'Quality:') {
 
             val = items[i+1].split('/')[0];
             val = isNaN(parseInt(val)) ? val : parseInt(val);
             parsed[idx].quality = val;
-        } else if (c === 'Encryption') {
-            var x = i + 1;
+        } else if (c === 'Encryption:') {
+            var x = i + 1,
                 enc = '';
 
             while (items[x] !== 'Cell') {
@@ -98,8 +145,18 @@ function parse(items) {
             idx += 1;
         }
     });
-
     return parsed;
+}
+
+function getFrequency(ch) {
+    var f = freqs[ch - 1];
+
+    if (f)
+        f = f + ' GHz';
+    else
+        f = '';
+
+    return f;
 }
 
 module.exports = wiscan;

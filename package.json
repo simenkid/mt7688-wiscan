@@ -1,6 +1,6 @@
 {
   "name": "mt7688-wiscan",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "MT7688 Wireless Information",
   "main": "index.js",
   "scripts": {

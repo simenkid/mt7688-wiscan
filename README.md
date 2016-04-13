@@ -30,15 +30,16 @@ var wiscan = require('mt7688-wiscan');
 ********************************************
 <a name="API_lqi"></a>
 ### .lqi([intf,] essid, callback)
-Initialize the Resources on qnode.  
+Query the LQI (link quality indicator) between your Linkit Smart 7688(in station mode) and its router(AP).  
 
 **Arguments:**  
 
 1. `intf` (_String_, optional): A default value of `'ra0'` will be used if not given.  
 2. `essid` (_String_): The ESSID of the AP to scan for.  
 3. `callback` (_Function_): `function(err, result) { ... }`. The `result` is a number between 0 and 100 to indicate the relative link quality between the station and access point. The value is bigger to show better link quality. If given 'essid' is not found after scan, `result` will be `null`.  
-
-[Note]
+  
+  
+**[Note]**
 * It takes around 5 seconds to accomplish a single scan.  
 * If you've changed the name of radio interface with OpenWrt configuration tool, you should give this method with the correct interface name, for example, `'myradio'`.  
 * You can also try this tool on other platforms, but be aware of that the radio interface name is subject to platforms. Use `iwconfig` command at console to get some hints.  

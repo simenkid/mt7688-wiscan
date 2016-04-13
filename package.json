@@ -1,6 +1,6 @@
 {
-  "name": "mt7688-iwinfo",
-  "version": "0.2.0",
+  "name": "mt7688-wiscan",
+  "version": "0.0.1",
   "description": "MT7688 Wireless Information",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/simenkid/mt7688-iwinfo.git"
+    "url": "git+https://github.com/simenkid/mt7688-wiscan.git"
   },
   "keywords": [
     "mt7688",
@@ -20,7 +20,7 @@
   "author": "Simen Li",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/simenkid/mt7688-iwinfo/issues"
+    "url": "https://github.com/simenkid/mt7688-wiscan/issues"
   },
-  "homepage": "https://github.com/simenkid/mt7688-iwinfo#readme"
+  "homepage": "https://github.com/simenkid/mt7688-wiscan#readme"
 }

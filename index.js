@@ -1,9 +1,9 @@
 var  exec = require('child_process').exec;
 
-var iwinfo = {};
+var wiscan = {};
 
-iwinfo.scan = function (intf, callback) {
-    var child = exec('time iwinfo ' + intf + ' scan', function (error, stdout, stderr) {
+wiscan.scan = function (intf, callback) {
+    var child = exec('iwinfo ' + intf + ' scan', function (error, stdout, stderr) {
         if (error)
             return callback(err);
 
@@ -26,11 +26,11 @@ iwinfo.scan = function (intf, callback) {
     });
 };
 
-iwinfo.scanByEssid = function (intf, essid, callback) {
+wiscan.scanByEssid = function (intf, essid, callback) {
     var hit = false,
         target;
 
-    iwinfo.scan(intf, function (err, infos) {
+    wiscan.scan(intf, function (err, infos) {
         if (err)
             return callback(err);
 
@@ -59,9 +59,9 @@ function parse(items) {
     items.forEach(function (c, i) {
         var val;
         if (c === 'Cell') {
-            val = items[i+1];
-            val = isNaN(parseInt(val)) ? val : parseInt(val);
-            parsed.push({ cell: val });
+            // val = items[i+1];
+            // val = isNaN(parseInt(val)) ? val : parseInt(val);
+            // parsed.push({ cell: val });
         } else if (c === 'Address') {
             parsed[idx].address = items[i+1];
         } else if (c === 'ESSID') {
@@ -102,4 +102,4 @@ function parse(items) {
     return parsed;
 }
 
-module.exports = iwinfo;
+module.exports = wiscan;

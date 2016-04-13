@@ -1,7 +1,7 @@
 {
   "name": "mt7688-wiscan",
-  "version": "0.0.2",
-  "description": "MT7688 Wireless Information",
+  "version": "0.8.0",
+  "description": "A wifi access points scanning tool for MediaTek Linkit Smart 7688",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

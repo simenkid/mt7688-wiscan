@@ -1,6 +1,6 @@
 {
   "name": "mt7688-wiscan",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "A wifi access points scanning tool for MediaTek Linkit Smart 7688",
   "main": "index.js",
   "scripts": {
